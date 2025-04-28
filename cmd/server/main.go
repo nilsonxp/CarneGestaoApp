@@ -2,6 +2,7 @@ package main
 
 import (
     "carnegestao/internal/usuarios" // puxando handler e repositorio de usuarios
+	"carnegestao/internal/auth"
     "github.com/joho/godotenv"
     _ "github.com/lib/pq"
     "net/http"
@@ -47,9 +48,11 @@ func main() {
 	fmt.Println("Conectado ao banco de dados com sucesso!")
 
 	// Inicializa repositórios
+	auth.InicializarAuth(db)
 	usuarios.InicializarRepositorio(db)
 
 	// Roteamento
+	http.HandleFunc("/login", auth.LoginHandler)
 	http.HandleFunc("/health", healthCheckHandler)
 	http.HandleFunc("/usuarios", usuarios.CriarUsuarioHandler)
 
