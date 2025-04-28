@@ -1,15 +1,16 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
-	"log"
-	"net/http"
-	"os"
-
-	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
+    "carnegestao/internal/usuarios" // puxando handler e repositorio de usuarios
+    "github.com/joho/godotenv"
+    _ "github.com/lib/pq"
+    "net/http"
+    "os"
+    "log"
+    "database/sql"
+    "fmt"
 )
+
 
 var db *sql.DB
 
@@ -45,8 +46,13 @@ func main() {
 	}
 	fmt.Println("Conectado ao banco de dados com sucesso!")
 
-	// Rota inicial de teste
+	// Inicializa repositórios
+	usuarios.InicializarRepositorio(db)
+
+	// Roteamento
 	http.HandleFunc("/health", healthCheckHandler)
+	http.HandleFunc("/usuarios", usuarios.CriarUsuarioHandler)
+
 
 	fmt.Println("Servidor rodando na porta 8080 🚀")
 	log.Fatal(http.ListenAndServe(":8080", nil))
