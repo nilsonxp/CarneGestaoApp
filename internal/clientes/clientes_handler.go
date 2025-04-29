@@ -1,6 +1,7 @@
 package clientes
 
 import (
+	"carnegestao/internal/auth"
 	"encoding/json"
 	"net/http"
 )
@@ -31,7 +32,9 @@ func CadastrarClienteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = SalvarCliente(req.NomeProprietario, req.NomeComercial, req.Telefone)
+	usuarioLogado := r.Context().Value(auth.UsuarioLogadoKey).(auth.UsuarioLogado)
+
+	err = SalvarCliente(req.NomeProprietario, req.NomeComercial, req.Telefone, usuarioLogado.ID)
 	if err != nil {
 		http.Error(w, "Erro ao salvar cliente: "+err.Error(), http.StatusInternalServerError)
 		return

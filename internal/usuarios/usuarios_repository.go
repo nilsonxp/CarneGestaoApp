@@ -16,7 +16,7 @@ func InicializarRepositorio(database *sql.DB) {
 }
 
 // Função para criar usuário
-func CriarUsuario(nome, email, senha, tipo string) error {
+func CriarUsuario(nome, email, senha, tipo string, criadoPor int) error {
 	// Verifica se o email já existe
 	var existe bool
 	err := db.QueryRow("SELECT EXISTS(SELECT 1 FROM usuarios WHERE email = $1)", email).Scan(&existe)
@@ -36,9 +36,9 @@ func CriarUsuario(nome, email, senha, tipo string) error {
 
 	// Insere no banco
 	_, err = db.Exec(`
-		INSERT INTO usuarios (nome, email, senha_hash, tipo)
-		VALUES ($1, $2, $3, $4)
-	`, nome, email, senhaHash, tipo)
+		INSERT INTO usuarios (nome, email, senha_hash, tipo, criado_por)
+		VALUES ($1, $2, $3, $4, $5)
+	`, nome, email, senhaHash, tipo, criadoPor)
 
 	if err != nil {
 		return fmt.Errorf("erro ao inserir usuário: %v", err)

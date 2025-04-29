@@ -13,11 +13,11 @@ func InicializarRepositorio(database *sql.DB) {
 }
 
 // Função para salvar cliente no banco
-func SalvarCliente(nomeProprietario, nomeComercial, telefone string) error {
+func SalvarCliente(nomeProprietario, nomeComercial, telefone string, criadoPor int) error {
 	_, err := db.Exec(`
-		INSERT INTO clientes (nome_proprietario, nome_comercial, telefone)
-		VALUES ($1, $2, $3)
-	`, nomeProprietario, nomeComercial, telefone)
+		INSERT INTO clientes (nome_proprietario, nome_comercial, telefone, criado_por)
+		VALUES ($1, $2, $3, $4)
+	`, nomeProprietario, nomeComercial, telefone, criadoPor)
 
 	if err != nil {
 		return fmt.Errorf("erro ao salvar cliente: %v", err)

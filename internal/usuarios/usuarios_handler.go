@@ -1,6 +1,7 @@
 package usuarios
 
 import (
+	"carnegestao/internal/auth"
 	"encoding/json"
 	"net/http"
 )
@@ -37,8 +38,10 @@ func CriarUsuarioHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	usuarioLogado := r.Context().Value(auth.UsuarioLogadoKey).(auth.UsuarioLogado)
+
 	// Chama função do repositório para salvar no banco
-	err = CriarUsuario(req.Nome, req.Email, req.Senha, req.Tipo)
+	err = CriarUsuario(req.Nome, req.Email, req.Senha, req.Tipo, usuarioLogado.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
