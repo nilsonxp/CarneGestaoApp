@@ -55,6 +55,10 @@ func main() {
 	http.HandleFunc("/login", auth.LoginHandler)
 	http.HandleFunc("/health", healthCheckHandler)
 	http.HandleFunc("/usuarios", usuarios.CriarUsuarioHandler)
+	http.HandleFunc("/protegido", auth.AutenticarMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Você acessou uma rota protegida! 🚀"))
+	}))
+	
 
 
 	fmt.Println("Servidor rodando na porta 8080 🚀")
