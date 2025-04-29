@@ -63,3 +63,17 @@ func SomenteAdmin(next http.HandlerFunc) http.HandlerFunc {
 		next(w, r)
 	})
 }
+
+// Verifica se o usuário logado é admin OU funcionário
+func SomenteAdminOuFuncionario(next http.HandlerFunc) http.HandlerFunc {
+	return AutenticarMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		usuarioLogado := r.Context().Value(UsuarioLogadoKey).(UsuarioLogado)
+
+		if usuarioLogado.Tipo != "admin" && usuarioLogado.Tipo != "funcionario" {
+			http.Error(w, "Acesso restrito a administradores e funcionários", http.StatusForbidden)
+			return
+		}
+
+		next(w, r)
+	})
+}
