@@ -2,6 +2,7 @@ package main
 
 import (
     "carnegestao/internal/usuarios" // puxando handler e repositorio de usuarios
+	"carnegestao/internal/clientes" // puxando handler e repositorio de clientes	
 	"carnegestao/internal/auth"
     "github.com/joho/godotenv"
     _ "github.com/lib/pq"
@@ -50,11 +51,13 @@ func main() {
 	// Inicializa repositórios
 	auth.InicializarAuth(db)
 	usuarios.InicializarRepositorio(db)
+	clientes.InicializarRepositorio(db)
 
 	// Roteamento
 	http.HandleFunc("/login", auth.LoginHandler)
 	http.HandleFunc("/health", healthCheckHandler)
 	http.HandleFunc("/usuarios", auth.SomenteAdmin(usuarios.CriarUsuarioHandler))
+	http.HandleFunc("/clientes", auth.SomenteAdminOuFuncionario(clientes.CadastrarClienteHandler))
 	http.HandleFunc("/protegido", auth.AutenticarMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Você acessou uma rota protegida! 🚀"))
 	}))
