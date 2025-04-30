@@ -43,3 +43,20 @@ func CadastrarClienteHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("Cliente criado com sucesso"))
 }
+
+// Handler para listar todos os clientes
+func ListarClientesHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
+		return
+	}
+
+	clientes, err := ListarClientes()
+	if err != nil {
+		http.Error(w, "Erro ao listar clientes: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(clientes)
+}

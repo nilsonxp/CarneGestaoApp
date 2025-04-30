@@ -57,7 +57,8 @@ func main() {
 	http.HandleFunc("/login", auth.LoginHandler)
 	http.HandleFunc("/health", healthCheckHandler)
 	http.HandleFunc("/usuarios", auth.SomenteAdmin(usuarios.CriarUsuarioHandler))
-	http.HandleFunc("/clientes", auth.SomenteAdminOuFuncionario(clientes.CadastrarClienteHandler))
+	http.HandleFunc("/clientes/cadastrar", auth.SomenteAdminOuFuncionario(clientes.CadastrarClienteHandler))
+	http.HandleFunc("/clientes/listar", auth.SomenteAdminOuFuncionario(clientes.ListarClientesHandler))
 	http.HandleFunc("/protegido", auth.AutenticarMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Você acessou uma rota protegida! 🚀"))
 	}))
