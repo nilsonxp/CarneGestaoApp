@@ -1,17 +1,19 @@
 package main
 
 import (
-    "carnegestao/internal/usuarios" // puxando handler e repositorio de usuarios
-	"carnegestao/internal/clientes" // puxando handler e repositorio de clientes
-	"carnegestao/internal/estoque" // puxando handler e repositorio de estoque
 	"carnegestao/internal/auth"
-    "github.com/joho/godotenv"
-    _ "github.com/lib/pq"
-    "net/http"
-    "os"
-    "log"
-    "database/sql"
-    "fmt"
+	"carnegestao/internal/clientes" // puxando handler e repositorio de clientes
+	"carnegestao/internal/estoque"  // puxando handler e repositorio de estoque
+	"carnegestao/internal/usuarios" // puxando handler e repositorio de usuarios
+	"carnegestao/internal/vendas"
+	"database/sql"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
 
@@ -54,6 +56,7 @@ func main() {
 	usuarios.InicializarRepositorio(db)
 	clientes.InicializarRepositorio(db)
 	estoque.InicializarRepositorio(db)
+	vendas.InicializarRepositorio(db)
 
 	// Roteamento
 	http.HandleFunc("/login", auth.LoginHandler)
@@ -63,6 +66,7 @@ func main() {
 	http.HandleFunc("/clientes/listar", auth.SomenteAdminOuFuncionario(clientes.ListarClientesHandler))
 	http.HandleFunc("/estoque/entrada", auth.SomenteAdminOuFuncionario(estoque.CadastrarEstoqueHandler))
 	http.HandleFunc("/estoque/entradas", auth.SomenteAdminOuFuncionario(estoque.ListarEstoqueHandler))
+	http.HandleFunc("/vendas/cadastrar", auth.SomenteAdminOuFuncionario(vendas.CadastrarVendaHandler))
 	http.HandleFunc("/protegido", auth.AutenticarMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Você acessou uma rota protegida! 🚀"))
 	}))
