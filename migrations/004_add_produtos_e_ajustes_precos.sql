@@ -72,8 +72,10 @@ CREATE TABLE venda_itens (
 CREATE TABLE venda_pagamentos (
     id SERIAL PRIMARY KEY,
     venda_id INT REFERENCES vendas(id),
-    valor NUMERIC(10,2) NOT NULL,
+    valor_pagamento NUMERIC(10,2) NOT NULL,
     forma_pagamento VARCHAR(20) NOT NULL,
     data_pagamento DATE NOT NULL,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    criado_por INT NOT NULL REFERENCES usuarios(id)
+    observacao TEXT,
 );

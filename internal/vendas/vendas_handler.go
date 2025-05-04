@@ -1,3 +1,4 @@
+// internal/vendas/vendas_handler.go
 package vendas
 
 import (
@@ -15,8 +16,8 @@ type FormaPagamento struct {
 }
 
 type VendaItem struct {
-	TipoCarne     string  `json:"tipo_carne"`
-	Animal        string  `json:"animal"`
+	ProdutoID     int     `json:"produto_id"`
+	TipoAnimal    string  `json:"tipo_animal"`
 	PesoKg        float64 `json:"peso_kg"`
 	Quantidade    int     `json:"quantidade"`
 	PrecoUnitario float64 `json:"preco_unitario"`
@@ -54,7 +55,6 @@ func CadastrarVendaHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validar ou ajustar a data
 	if req.Data == "" {
 		req.Data = time.Now().Format("2006-01-02")
 	}
